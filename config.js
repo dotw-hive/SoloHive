@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HIVE PERSONAL BLOG — CONFIG FILE
+ *  SoloHive — CONFIG FILE
  *  Edit this file to set up your blog. That's it!
  * ============================================================
  */
