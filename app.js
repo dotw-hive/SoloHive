@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  SoloHive — app.js  (v1.2)
+ *  HIVE PERSONAL BLOG — app.js  (v1.2)
  *  Changes:
  *   - Community feed support (hive-XXXXXX)
  *   - Favicon support via config
@@ -448,6 +448,27 @@ function renderPagination(hasPrev, hasNext, onPrev, onNext) {
   pagination.appendChild(nextBtn);
 }
 
+// Sanitize post body before rendering.
+// Handles edge cases from various Hive posting apps.
+function sanitizePostBody(body) {
+  if (!body) return "";
+  return body
+    // Strip <center> tags — marked.js won't parse markdown inside HTML block
+    // elements, leaving image syntax as raw text. Remove the tags, keep content.
+    .replace(/<center>/gi, "\n\n")
+    .replace(/<\/center>/gi, "\n\n")
+
+    // Two or more images on the same line with no separation → add newlines between them
+    .replace(/(!\[[^\]]*\]\([^)]+\))(!\[[^\]]*\]\([^)]+\))/g, "$1\n\n$2")
+    // Image immediately followed by text on the same line → newline after image
+    .replace(/(!\[[^\]]*\]\([^)]+\))([^\n])/g, "$1\n\n$2")
+    // HTML <br> tags → newline
+    .replace(/<br\s*\/?>/gi, "\n")
+    // Clean up excessive blank lines
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 // ── Share helpers ─────────────────────────────────────────────────────────────
 
 function copyPostLink(url) {
@@ -541,7 +562,7 @@ async function initPost() {
         </header>
 
         <div class="post-body">
-          ${renderMarkdown(body)}
+          ${renderMarkdown(sanitizePostBody(body))}
         </div>
 
         <footer class="post-footer">
