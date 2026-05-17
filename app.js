@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HIVE PERSONAL BLOG — app.js  (v1.2)
+ *  SoloHive — app.js  (v1.2)
  *  Changes:
  *   - Community feed support (hive-XXXXXX)
  *   - Favicon support via config
