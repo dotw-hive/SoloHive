@@ -1,4 +1,4 @@
-# Hive Personal Blog
+# SoloHive - Self Hosted Personal Blog
 
 A self-hosted blog that displays your Hive content on your own domain.
 Your posts live on the Hive blockchain — this script just presents them beautifully.
