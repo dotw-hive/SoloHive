@@ -84,7 +84,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
 
   // Text shown in the footer on every page.
-  footerText: "Powered by the Hive blockchain. Content is censorship-resistant and permanently stored on-chain.",
+  footerText: "Powered by SoloHive — content stored on the Hive blockchain.",
 
   // Footer widget — paste any HTML snippet here (e.g. a banner ad,
   // affiliate disclosure, email signup). Leave as "" to hide.
