@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  SoloHive — CONFIG FILE
+ *  HIVE PERSONAL BLOG — CONFIG FILE
  *  Edit this file to set up your blog. That's it!
  * ============================================================
  */
@@ -10,7 +10,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   //  YOUR HIVE IDENTITY
   // ----------------------------------------------------------
-  hiveUsername: "dudeontheweb",          // Your Hive account name (no @)
+  hiveUsername: "yourusername",          // Your Hive account name (no @)
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
@@ -38,7 +38,7 @@ const BLOG_CONFIG = {
   //  Leave as "" to use the browser default (no favicon).
   //  Recommended size: 32x32 or 64x64 px. PNG or ICO format.
   // ----------------------------------------------------------
-  favicon: "",  // e.g. "favicon.png"  or  "https://yourdomain.com/icon.png"
+  favicon: "favicon.svg",  // e.g. "favicon.png"  or  "https://yourdomain.com/icon.png"
 
   // ----------------------------------------------------------
   //  COMMENT FILTER
