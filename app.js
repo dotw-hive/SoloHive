@@ -464,6 +464,20 @@ function sanitizePostBody(body) {
     .replace(/<center>/gi, "\n\n")
     .replace(/<\/center>/gi, "\n\n")
 
+    // ── YouTube embeds ───────────────────────────────────────────────────────
+    // Convert YouTube URLs on their own line to responsive iframe embeds.
+    // Handles: standard, shortened, timestamped, and live stream URLs.
+    // Must run before marked.js so the iframe isn't escaped as text.
+    .replace(
+      /(?:^|\n)([ \t]*(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})[^\s\n]*)/gm,
+      (match, full, videoId) => {
+        // Extract timestamp if present (&t=123s or &t=123)
+        const tMatch = full.match(/[?&]t=(\d+)/);
+        const start  = tMatch ? `&start=${tMatch[1]}` : "";
+        return `\n\n<div class="yt-embed"><iframe src="https://www.youtube.com/embed/${videoId}?rel=0${start}" frameborder="0" allowfullscreen loading="lazy" title="YouTube video"></iframe></div>\n\n`;
+      }
+    )
+
     // Two or more images on the same line with no separation → add newlines between them
     .replace(/(!\[[^\]]*\]\([^)]+\))(!\[[^\]]*\]\([^)]+\))/g, "$1\n\n$2")
     // Image immediately followed by text on the same line → newline after image
