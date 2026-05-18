@@ -1,5 +1,5 @@
 /* ============================================================
-   SoloHive — style.css  (v1.1)
+   HIVE PERSONAL BLOG — style.css  (v1.1)
    - Dark mode via [data-theme="dark"] on <html>
    - Toggle button in header
    ============================================================ */
@@ -340,7 +340,7 @@ h1, h2, h3, h4 {
 }
 
 /* ── Post Body (rendered Markdown) ──────────────────────────── */
-.post-body { max-width: 680px; font-size: 1.08rem; line-height: 1.8; }
+.post-body { max-width: 680px; font-size: 1.08rem; line-height: 1.8; word-break: break-word; overflow-wrap: break-word; }
 
 .post-body h1, .post-body h2, .post-body h3 { margin: 2rem 0 .75rem; }
 .post-body h1 { font-size: 1.9rem; }
@@ -536,10 +536,8 @@ h1, h2, h3, h4 {
    or restrict overflow only to elements that don't contain sticky children. */
 body { max-width: 100%; }
 
-.site-header { overflow: hidden; }  /* header never needs to scroll */
-.post-body   { overflow-x: hidden; }
 .post-body * { max-width: 100%; }
-.post-card   { overflow: hidden; }  /* already set but reinforced */
+.post-card   { overflow: hidden; }
 
 /* ── Dark Mode Toggle Button ────────────────────────────────── */
 .dark-toggle {
