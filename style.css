@@ -662,3 +662,44 @@ body { max-width: 100%; }
 }
 
 .footer-widget-slot:empty { display: none; }
+
+/* ── Clickable author links (byline + comments) ─────────────── */
+.byline-author-link {
+  display:     flex;
+  align-items: center;
+  gap:         .6rem;
+  color:       inherit;
+  text-decoration: none;
+}
+
+.byline-author-link:hover { color: var(--color-accent); text-decoration: none; }
+.byline-author-link:hover .byline-avatar { border-color: var(--color-accent); }
+
+.byline-avatar {
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  transition: border-color var(--transition);
+}
+
+.comment-author-link {
+  display:     flex;
+  align-items: center;
+  gap:         .4rem;
+  color:       inherit;
+  text-decoration: none;
+}
+
+.comment-author-link:hover { color: var(--color-accent); text-decoration: none; }
+
+/* ── Mention and hashtag links in post body ─────────────────── */
+.post-body a[href*="/@"],
+.post-body a[href*="/trending/"] {
+  color:           var(--color-accent);
+  text-decoration: none;
+  font-weight:     500;
+}
+
+.post-body a[href*="/@"]:hover,
+.post-body a[href*="/trending/"]:hover {
+  text-decoration: underline;
+}

@@ -1,12 +1,10 @@
 /**
  * ============================================================
- *  SoloHive — app.js  (v1.2)
+ *  SOLOHIVE — app.js  (v1.3)
  *  Changes:
- *   - Community feed support (hive-XXXXXX)
- *   - Favicon support via config
- *   - minCommentReputation moved to config.js
- *   - Social share buttons on post.html (Twitter/X, Facebook, LinkedIn, copy link)
- *   - Footer widget slot
+ *   - Configurable Hive frontend (hiveFrontend in config.js)
+ *   - Hashtag #tag and @mention linking in post bodies
+ *   - Community mode: clickable author on post.html
  * ============================================================
  */
 
@@ -62,7 +60,15 @@ function isCommunityMode() {
   return BLOG_CONFIG.hiveCommunity && BLOG_CONFIG.hiveCommunity.trim() !== "";
 }
 
-// ── Hive Reputation Decoder ───────────────────────────────────────────────────
+// ── Frontend URL helper ───────────────────────────────────────────────────────
+// Returns the base URL of the configured Hive frontend, no trailing slash.
+// Falls back to hive.blog if not set.
+function frontendBase() {
+  const f = (BLOG_CONFIG.hiveFrontend || "hive.blog").trim().replace(/\/$/, "");
+  return f.startsWith("http") ? f : `https://${f}`;
+}
+
+
 // Hive stores reputation as a large raw integer. This converts it to the
 // familiar 0–100 scale shown on PeakD, Hive.blog, etc.
 
@@ -291,7 +297,7 @@ function renderSidebar() {
   const avatar = `https://images.hive.blog/u/${BLOG_CONFIG.hiveUsername}/avatar`;
 
   const socialLinks = [
-    soc.hive      && `<a href="https://hive.blog/@${soc.hive}" target="_blank" rel="noopener" title="Hive">
+    soc.hive      && `<a href="${frontendBase()}/@${soc.hive}" target="_blank" rel="noopener" title="Hive">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 4l4 8H8l4-8zm0 16l-4-8h8l-4 8z"/></svg></a>`,
     soc.twitter   && `<a href="https://twitter.com/${soc.twitter}" target="_blank" rel="noopener" title="Twitter/X">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>`,
@@ -469,6 +475,52 @@ function sanitizePostBody(body) {
     .trim();
 }
 
+// ── Mention & Hashtag Linking ─────────────────────────────────────────────────
+// Runs on the rendered HTML (after marked.js) so we only touch text nodes,
+// never double-linking things already inside <a> tags or <code> blocks.
+function linkMentionsAndTags(html) {
+  // Use a temporary DOM element to safely walk text nodes only
+  const div = document.createElement("div");
+  div.innerHTML = html;
+
+  const base = frontendBase();
+
+  function processNode(node) {
+    // Skip anchor tags, code, and pre blocks entirely
+    if (node.nodeType === 1) {
+      const tag = node.tagName.toLowerCase();
+      if (tag === "a" || tag === "code" || tag === "pre") return;
+      node.childNodes.forEach(processNode);
+      return;
+    }
+
+    // Only process text nodes
+    if (node.nodeType !== 3) return;
+    const text = node.textContent;
+    if (!text) return;
+
+    // Check if there's anything to replace
+    if (!/@[a-z0-9._-]{3,}/i.test(text) && !/#[a-z0-9-]{2,}/i.test(text)) return;
+
+    // Replace @mentions and #tags with links
+    const replaced = text
+      .replace(/@([a-z0-9._-]{3,})/gi, (_, user) =>
+        `<a href="${base}/@${user}" target="_blank" rel="noopener">@${user}</a>`)
+      .replace(/#([a-z0-9-]{2,})/gi, (_, tag) =>
+        `<a href="${base}/trending/${tag}" target="_blank" rel="noopener">#${tag}</a>`);
+
+    // Only replace the node if something changed
+    if (replaced !== text) {
+      const span = document.createElement("span");
+      span.innerHTML = replaced;
+      node.parentNode.replaceChild(span, node);
+    }
+  }
+
+  div.childNodes.forEach(processNode);
+  return div.innerHTML;
+}
+
 // ── Share helpers ─────────────────────────────────────────────────────────────
 
 function copyPostLink(url) {
@@ -550,9 +602,11 @@ async function initPost() {
           </div>
           <h1 class="post-title">${post.title}</h1>
           <div class="post-byline">
-            <img src="https://images.hive.blog/u/${post.author}/avatar/small"
-                 class="byline-avatar" alt="${post.author}">
-            <span>by <strong>@${post.author}</strong></span>
+            <a href="${frontendBase()}/@${post.author}" target="_blank" rel="noopener" class="byline-author-link">
+              <img src="https://images.hive.blog/u/${post.author}/avatar/small"
+                   class="byline-avatar" alt="${post.author}">
+              <span>by <strong>@${post.author}</strong></span>
+            </a>
             <span class="post-stats">♥ ${post.net_votes} · ${payout(post)}</span>
           </div>
           ${tags.length
@@ -562,7 +616,7 @@ async function initPost() {
         </header>
 
         <div class="post-body">
-          ${renderMarkdown(sanitizePostBody(body))}
+          ${linkMentionsAndTags(renderMarkdown(sanitizePostBody(body)))}
         </div>
 
         <footer class="post-footer">
@@ -593,7 +647,7 @@ async function initPost() {
               </button>
             </div>
           </div>
-          <a href="https://hive.blog/@${post.author}/${post.permlink}"
+          <a href="${frontendBase()}/@${post.author}/${post.permlink}"
              target="_blank" rel="noopener" class="hive-link">
             View on Hive →
           </a>
@@ -611,9 +665,11 @@ async function initPost() {
           ? comments.map(c => `
               <div class="comment">
                 <div class="comment-author">
-                  <img src="https://images.hive.blog/u/${c.author}/avatar/small"
-                       alt="${c.author}" class="comment-avatar">
-                  <strong>@${c.author}</strong>
+                  <a href="${frontendBase()}/@${c.author}" target="_blank" rel="noopener" class="comment-author-link">
+                    <img src="https://images.hive.blog/u/${c.author}/avatar/small"
+                         alt="${c.author}" class="comment-avatar">
+                    <strong>@${c.author}</strong>
+                  </a>
                   <span class="rep-badge" title="Reputation">
                     ${decodeReputation(c.author_reputation)}
                   </span>

@@ -14,7 +14,18 @@ const BLOG_CONFIG = {
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
-  //  COMMUNITY MODE  (optional)
+  //  HIVE FRONTEND
+  //  Which Hive frontend to use for profile links, "View on Hive",
+  //  @mention links, and #tag links throughout the site.
+  //  Common options:
+  //    "hive.blog"    — default
+  //    "peakd.com"    — PeakD
+  //    "ecency.com"   — Ecency
+  //  You can also enter any custom frontend domain e.g. "inleo.io"
+  // ----------------------------------------------------------
+  hiveFrontend: "hive.blog",
+
+
   //  To show posts from a Hive community instead of a single
   //  user, set hiveCommunity to the community tag e.g. "hive-123456".
   //  Leave as "" to show only your own posts (default).
