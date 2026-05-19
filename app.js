@@ -461,24 +461,38 @@ function sanitizePostBody(body) {
   return body
     // Strip <center> tags — marked.js won't parse markdown inside HTML block
     // elements, leaving image syntax as raw text. Remove the tags, keep content.
-    .replace(/<center>/gi, "\n\n")
-    .replace(/<\/center>/gi, "\n\n")
+    .replace(/<center>/gi, "")
+    .replace(/<\/center>/gi, "")
+
+    // ── Markdown pipe tables with images ─────────────────────────────────────
+    // Tables using | pipe syntax with images in cells won't render the markdown
+    // inside them. Detect table blocks and extract cell contents as paragraphs.
+    .replace(/(?:^|\n)((?:\|[^\n]+\|\n?)+)/gm, (match, table) => {
+      // Skip separator rows (e.g. | :---: | :---: |)
+      const rows = table.trim().split("\n").filter(row =>
+        !/^\|[\s:|−-]+\|/.test(row.trim())
+      );
+      const cells = [];
+      rows.forEach(row => {
+        row.split("|").forEach(cell => {
+          const trimmed = cell.trim();
+          if (trimmed) cells.push(trimmed);
+        });
+      });
+      return cells.length ? "\n\n" + cells.join("\n\n") + "\n\n" : "";
+    })
 
     // ── YouTube embeds ───────────────────────────────────────────────────────
-    // Convert YouTube URLs on their own line to responsive iframe embeds.
-    // Handles: standard, shortened, timestamped, and live stream URLs.
-    // Must run before marked.js so the iframe isn't escaped as text.
     .replace(
       /(?:^|\n)([ \t]*(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})[^\s\n]*)/gm,
       (match, full, videoId) => {
-        // Extract timestamp if present (&t=123s or &t=123)
         const tMatch = full.match(/[?&]t=(\d+)/);
         const start  = tMatch ? `&start=${tMatch[1]}` : "";
         return `\n\n<div class="yt-embed"><iframe src="https://www.youtube.com/embed/${videoId}?rel=0${start}" frameborder="0" allowfullscreen loading="lazy" title="YouTube video"></iframe></div>\n\n`;
       }
     )
 
-    // Two or more images on the same line with no separation → add newlines between them
+    // Two or more images on the same line → add newlines between them
     .replace(/(!\[[^\]]*\]\([^)]+\))(!\[[^\]]*\]\([^)]+\))/g, "$1\n\n$2")
     // Image immediately followed by text on the same line → newline after image
     .replace(/(!\[[^\]]*\]\([^)]+\))([^\n])/g, "$1\n\n$2")
