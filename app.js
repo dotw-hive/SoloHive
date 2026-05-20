@@ -611,15 +611,6 @@ async function initPost() {
     const hiddenCount = allComments.length - comments.length;
 
     const tags = extractTags(post);
-    const img  = extractImage(post);
-
-    // If we're showing the image as a hero banner, remove its first occurrence
-    // from the body so it doesn't render twice.
-    let body = post.body;
-    if (img) {
-      // Remove the first markdown image tag whose URL matches the hero image
-      body = body.replace(/!\[.*?\]\([^)]*\)/, "").trimStart();
-    }
 
     content.innerHTML = `
       <article class="full-post">
@@ -640,11 +631,10 @@ async function initPost() {
           ${tags.length
             ? `<div class="post-tags">${tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>`
             : ""}
-          ${img ? `<div class="post-hero" style="background-image:url('${img}')"></div>` : ""}
         </header>
 
         <div class="post-body">
-          ${linkMentionsAndTags(renderMarkdown(sanitizePostBody(body)))}
+          ${linkMentionsAndTags(renderMarkdown(sanitizePostBody(post.body)))}
         </div>
 
         <footer class="post-footer">
