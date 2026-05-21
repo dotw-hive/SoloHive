@@ -38,22 +38,12 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   siteTitle:    "My Blog",                    // Displayed in the header & browser tab
   siteTagline:  "Thoughts, ideas, and more.", // Shown under the title in the header
-  siteUrl:      "https://dotw-hive.github.io/SoloHive",     // Your domain (used for share links)
+  siteUrl:      "https://yourdomain.com",     // Your domain (used for share links)
   postsPerPage: 10,                           // Posts per page — max 19 (Hive API limit)
   defaultTag:   "",                           // Filter to one tag only — leave "" for all posts
 
   // ----------------------------------------------------------
-  //  OPEN GRAPH / SOCIAL SHARING
-  //  Fallback image used when a post has no cover image.
-  //  Shown in social share preview cards on Twitter/X, Facebook,
-  //  LinkedIn, Discord etc. Recommended size: 1200x630px.
-  //  Use a full URL e.g. "https://yourdomain.com/og-image.png"
-  //  or a relative path e.g. "og-image.png"
-  //  Leave as "" to use no fallback image.
-  // ----------------------------------------------------------
-  ogDefaultImage: "https://dotw-hive.github.io/SoloHive/og-image.png",
-
-
+  //  FAVICON
   //  URL to your favicon image. Can be a full URL or a path
   //  relative to your site e.g. "favicon.png" or "images/icon.png"
   //  Leave as "" to use the browser default (no favicon).
