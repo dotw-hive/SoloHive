@@ -10,7 +10,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   //  YOUR HIVE IDENTITY
   // ----------------------------------------------------------
-  hiveUsername: "yourusername",          // Your Hive account name (no @)
+  hiveUsername: "dudeontheweb",          // Your Hive account name (no @)
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
@@ -38,7 +38,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   siteTitle:    "My Blog",                    // Displayed in the header & browser tab
   siteTagline:  "Thoughts, ideas, and more.", // Shown under the title in the header
-  siteUrl:      "https://yourdomain.com",     // Your domain (used for share links)
+  siteUrl:      "https://dotw-hive.github.io/SoloHive",     // Your domain (used for share links)
   postsPerPage: 10,                           // Posts per page — max 19 (Hive API limit)
   defaultTag:   "",                           // Filter to one tag only — leave "" for all posts
 
