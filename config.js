@@ -10,7 +10,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   //  YOUR HIVE IDENTITY
   // ----------------------------------------------------------
-  hiveUsername: "dudeontheweb",          // Your Hive account name (no @)
+  hiveUsername: "yourusername",          // Your Hive account name (no @)
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
@@ -43,7 +43,17 @@ const BLOG_CONFIG = {
   defaultTag:   "",                           // Filter to one tag only — leave "" for all posts
 
   // ----------------------------------------------------------
-  //  FAVICON
+  //  OPEN GRAPH / SOCIAL SHARING
+  //  Fallback image used when a post has no cover image.
+  //  Shown in social share preview cards on Twitter/X, Facebook,
+  //  LinkedIn, Discord etc. Recommended size: 1200x630px.
+  //  Use a full URL e.g. "https://yourdomain.com/og-image.png"
+  //  or a relative path e.g. "og-image.png"
+  //  Leave as "" to use no fallback image.
+  // ----------------------------------------------------------
+  ogDefaultImage: "",
+
+
   //  URL to your favicon image. Can be a full URL or a path
   //  relative to your site e.g. "favicon.png" or "images/icon.png"
   //  Leave as "" to use the browser default (no favicon).
