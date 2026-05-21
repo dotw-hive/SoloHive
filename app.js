@@ -54,7 +54,77 @@ function initFavicon() {
   document.head.appendChild(link);
 }
 
-// ── Community vs Single-user helper ──────────────────────────────────────────
+// ── Analytics ─────────────────────────────────────────────────────────────────
+
+function initAnalytics() {
+  if (!BLOG_CONFIG.analyticsCode || !BLOG_CONFIG.analyticsCode.trim()) return;
+  const div = document.createElement("div");
+  div.innerHTML = BLOG_CONFIG.analyticsCode.trim();
+  // Move all script and other nodes into <head>
+  Array.from(div.childNodes).forEach(node => {
+    if (node.tagName === "SCRIPT") {
+      // Scripts must be recreated to actually execute
+      const script = document.createElement("script");
+      Array.from(node.attributes).forEach(attr =>
+        script.setAttribute(attr.name, attr.value));
+      if (node.textContent) script.textContent = node.textContent;
+      document.head.appendChild(script);
+    } else {
+      document.head.appendChild(node.cloneNode(true));
+    }
+  });
+}
+
+
+
+function setMeta(id, value) {
+  const el = document.getElementById(id);
+  if (el && value) el.setAttribute("content", value);
+}
+
+// Sets OG and Twitter card meta tags for the index (home) page.
+function setIndexOpenGraph() {
+  const url = BLOG_CONFIG.siteUrl || "";
+  const img = BLOG_CONFIG.ogDefaultImage
+    ? BLOG_CONFIG.ogDefaultImage.startsWith("http")
+      ? BLOG_CONFIG.ogDefaultImage
+      : `${url}/${BLOG_CONFIG.ogDefaultImage}`
+    : "";
+
+  document.title = BLOG_CONFIG.siteTitle;
+  setMeta("og-site-name",   BLOG_CONFIG.siteTitle);
+  setMeta("og-title",       BLOG_CONFIG.siteTitle);
+  setMeta("og-description", BLOG_CONFIG.siteTagline);
+  setMeta("og-url",         url);
+  setMeta("og-image",       img);
+  setMeta("tw-title",       BLOG_CONFIG.siteTitle);
+  setMeta("tw-description", BLOG_CONFIG.siteTagline);
+  setMeta("tw-image",       img);
+}
+
+// Sets OG and Twitter card meta tags for a single post page.
+function setPostOpenGraph(post) {
+  const url      = BLOG_CONFIG.siteUrl || "";
+  const postUrl  = `${url}/post.html?author=${post.author}&permlink=${post.permlink}`;
+  const excerpt  = excerptFrom(post.body).slice(0, 160);
+  const img      = extractImage(post)
+    || (BLOG_CONFIG.ogDefaultImage
+      ? BLOG_CONFIG.ogDefaultImage.startsWith("http")
+        ? BLOG_CONFIG.ogDefaultImage
+        : `${url}/${BLOG_CONFIG.ogDefaultImage}`
+      : "");
+
+  setMeta("og-site-name",   BLOG_CONFIG.siteTitle);
+  setMeta("og-title",       post.title);
+  setMeta("og-description", excerpt);
+  setMeta("og-url",         postUrl);
+  setMeta("og-image",       img);
+  setMeta("tw-title",       post.title);
+  setMeta("tw-description", excerpt);
+  setMeta("tw-image",       img);
+}
+
+
 
 function isCommunityMode() {
   return BLOG_CONFIG.hiveCommunity && BLOG_CONFIG.hiveCommunity.trim() !== "";
@@ -346,6 +416,8 @@ async function initIndex() {
   if (fw && BLOG_CONFIG.footerWidget) fw.innerHTML = BLOG_CONFIG.footerWidget;
 
   initFavicon();
+  initAnalytics();
+  setIndexOpenGraph();
   initDarkMode();
   renderSidebar();
   await loadPostList();
@@ -588,6 +660,7 @@ async function initPost() {
   if (fw && BLOG_CONFIG.footerWidget) fw.innerHTML = BLOG_CONFIG.footerWidget;
 
   initFavicon();
+  initAnalytics();
   initDarkMode();
   renderSidebar();
 
@@ -602,6 +675,7 @@ async function initPost() {
 
     if (loading) loading.style.display = "none";
     document.title = `${post.title} — ${BLOG_CONFIG.siteTitle}`;
+    setPostOpenGraph(post);
 
     // ── Filter low-reputation (spam) comments ────────────────────────────────
     const threshold = minReputation();

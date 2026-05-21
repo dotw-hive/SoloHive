@@ -10,7 +10,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   //  YOUR HIVE IDENTITY
   // ----------------------------------------------------------
-  hiveUsername: "dudeontheweb",          // Your Hive account name (no @)
+  hiveUsername: "yourusername",          // Your Hive account name (no @)
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
@@ -43,7 +43,42 @@ const BLOG_CONFIG = {
   defaultTag:   "",                           // Filter to one tag only — leave "" for all posts
 
   // ----------------------------------------------------------
-  //  FAVICON
+  //  ANALYTICS / TRACKING  (optional)
+  //  Paste your analytics script snippet between the backticks.
+  //  Works with Google Analytics, Cloudflare Analytics, Plausible,
+  //  Fathom, or any other tracker that uses a script tag.
+  //  Leave as "" to disable.
+  //
+  //  Example — Google Analytics:
+  //  analyticsCode: `
+  //    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  //    <script>
+  //      window.dataLayer = window.dataLayer || [];
+  //      function gtag(){dataLayer.push(arguments);}
+  //      gtag('js', new Date());
+  //      gtag('config', 'G-XXXXXXXXXX');
+  //    </script>
+  //  `,
+  //
+  //  Example — Cloudflare Analytics:
+  //  analyticsCode: `
+  //    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+  //      data-cf-beacon='{"token": "your-token-here"}'></script>
+  //  `,
+  // ----------------------------------------------------------
+  analyticsCode: ``,
+
+
+  //  Fallback image used when a post has no cover image.
+  //  Shown in social share preview cards on Twitter/X, Facebook,
+  //  LinkedIn, Discord etc. Recommended size: 1200x630px.
+  //  Use a full URL e.g. "https://yourdomain.com/og-image.png"
+  //  or a relative path e.g. "og-image.png"
+  //  Leave as "" to use no fallback image.
+  // ----------------------------------------------------------
+  ogDefaultImage: "",
+
+
   //  URL to your favicon image. Can be a full URL or a path
   //  relative to your site e.g. "favicon.png" or "images/icon.png"
   //  Leave as "" to use the browser default (no favicon).
