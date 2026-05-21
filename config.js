@@ -51,7 +51,7 @@ const BLOG_CONFIG = {
   //  or a relative path e.g. "og-image.png"
   //  Leave as "" to use no fallback image.
   // ----------------------------------------------------------
-  ogDefaultImage: "",
+  ogDefaultImage: "https://files.peakd.com/file/peakd-hive/dudeontheweb/23tvD5oYsBUALUr51BcoYQBxAhpMxXW8PGUBpfmEuiNNM8yG4qT8pFFk39vPxm54pPwsC.png",
 
 
   //  URL to your favicon image. Can be a full URL or a path
