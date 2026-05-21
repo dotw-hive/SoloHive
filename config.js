@@ -51,7 +51,7 @@ const BLOG_CONFIG = {
   //  or a relative path e.g. "og-image.png"
   //  Leave as "" to use no fallback image.
   // ----------------------------------------------------------
-  ogDefaultImage: "https://images.hive.blog/1200x630/https://files.peakd.com/file/peakd-hive/dudeontheweb/23tvD5oYsBUALUr51BcoYQBxAhpMxXW8PGUBpfmEuiNNM8yG4qT8pFFk39vPxm54pPwsC.png",
+  ogDefaultImage: "https://dotw-hive.github.io/SoloHive/favicon.svg",
 
 
   //  URL to your favicon image. Can be a full URL or a path
