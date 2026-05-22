@@ -140,16 +140,19 @@ async function hiveCall(method, params) {
 // Handles both single-user blogs and community feeds.
 // Keeps fetching in batches until we have pageSize+1 qualifying posts
 // (the extra one lets us detect whether an older page exists).
+// Max 5 batches to prevent infinite loops when reblogs dominate the feed.
 async function fetchPostsFiltered(startAuthor, startPermlink) {
   const need      = pageSize + 1;
   const batchSize = 20; // Hive API hard cap
+  const maxBatches = 5; // prevent infinite loops
   const community = isCommunityMode();
   const collected = [];
   let curAuthor   = startAuthor;
   let curPerm     = startPermlink;
   let firstBatch  = true;
+  let batchCount  = 0;
 
-  while (collected.length < need) {
+  while (collected.length < need && batchCount < maxBatches) {
     const params = {
       tag:   community ? BLOG_CONFIG.hiveCommunity.trim() : BLOG_CONFIG.hiveUsername,
       limit: batchSize,
@@ -167,6 +170,7 @@ async function fetchPostsFiltered(startAuthor, startPermlink) {
     // Hive cursors are inclusive — skip the first item on subsequent batches
     const items = firstBatch ? batch : batch.slice(1);
     firstBatch  = false;
+    batchCount++;
 
     for (const post of items) {
       if (!community && post.author !== BLOG_CONFIG.hiveUsername) continue; // skip reblogs
@@ -177,6 +181,7 @@ async function fetchPostsFiltered(startAuthor, startPermlink) {
 
     if (batch.length < batchSize) break; // no more posts on chain
 
+    // Advance cursor using the last item in the batch
     const last = batch[batch.length - 1];
     curAuthor   = last.author;
     curPerm     = last.permlink;
