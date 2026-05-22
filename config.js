@@ -10,7 +10,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   //  YOUR HIVE IDENTITY
   // ----------------------------------------------------------
-  hiveUsername: "dudeontheweb",          // Your Hive account name (no @)
+  hiveUsername: "yourusername",          // Your Hive account name (no @)
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
@@ -38,7 +38,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   siteTitle:    "My Blog",                    // Displayed in the header & browser tab
   siteTagline:  "Thoughts, ideas, and more.", // Shown under the title in the header
-  siteUrl:      "https://dotw-hive.github.io/SoloHive",     // Your domain (used for share links)
+  siteUrl:      "https://yourdomain.com",     // Your domain (used for share links)
   postsPerPage: 10,                           // Posts per page — max 19 (Hive API limit)
   defaultTag:   "",                           // Filter to one tag only — leave "" for all posts
 
@@ -48,6 +48,14 @@ const BLOG_CONFIG = {
   //  Works with Google Analytics, Cloudflare Analytics, Plausible,
   //  Fathom, or any other tracker that uses a script tag.
   //  Leave as "" to disable.
+  //
+  //  ⚠️  SECURITY WARNING:
+  //  Only paste code from trusted, well-known analytics providers.
+  //  Never paste code from unknown or unverified sources.
+  //  Malicious scripts placed here will execute on your visitors'
+  //  browsers and could be used to steal data, redirect users,
+  //  or perform other attacks. SoloHive is not responsible for
+  //  any third-party code placed in this slot.
   //
   //  Example — Google Analytics:
   //  analyticsCode: `
