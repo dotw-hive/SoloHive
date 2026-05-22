@@ -545,8 +545,24 @@ function renderSidebar() {
 // so max displayable per page is 19.
 const pageSize = Math.min(Math.max(1, parseInt(BLOG_CONFIG.postsPerPage) || 10), 19);
 
-// Stack of {author, permlink} cursors for pagination history
-let pageHistory = [];
+// Pagination history stored in sessionStorage so browser back/forward works.
+// Each entry is a {author, permlink} cursor representing the first post of that page.
+// Empty stack = page 1.
+function getPageHistory() {
+  try {
+    return JSON.parse(sessionStorage.getItem("solohive-page-history") || "[]");
+  } catch (_) { return []; }
+}
+
+function setPageHistory(history) {
+  try {
+    sessionStorage.setItem("solohive-page-history", JSON.stringify(history));
+  } catch (_) {}
+}
+
+function clearPageHistory() {
+  try { sessionStorage.removeItem("solohive-page-history"); } catch (_) {}
+}
 
 function initPage(isPost) {
   const el = (id) => document.getElementById(id);
@@ -568,7 +584,18 @@ function initPage(isPost) {
 async function initIndex() {
   initPage(false);
   setIndexOpenGraph();
-  await loadPostList();
+
+  // On back navigation restore the saved cursor so the user lands on
+  // the same page they were on. On fresh visits clear the history.
+  const navType = performance.getEntriesByType("navigation")[0]?.type;
+  if (navType === "back_forward") {
+    const history = getPageHistory();
+    const cursor  = history[history.length - 1];
+    await loadPostList(cursor?.author, cursor?.permlink);
+  } else {
+    clearPageHistory();
+    await loadPostList();
+  }
 }
 
 async function loadPostList(startAuthor, startPermlink) {
@@ -582,7 +609,8 @@ async function loadPostList(startAuthor, startPermlink) {
     const posts   = await fetchPostsFiltered(startAuthor, startPermlink);
     const hasNext = posts.length > pageSize;
     const visible = hasNext ? posts.slice(0, pageSize) : posts;
-    const hasPrev = pageHistory.length > 0;
+    const history = getPageHistory();
+    const hasPrev = history.length > 0;
 
     if (loading) loading.style.display = "none";
 
@@ -629,12 +657,18 @@ async function loadPostList(startAuthor, startPermlink) {
       hasPrev,
       hasNext,
       () => {
-        pageHistory.pop();
-        const cursor = pageHistory[pageHistory.length - 1];
+        // ← Newer: pop current cursor and reload from previous page
+        const h = getPageHistory();
+        h.pop();
+        setPageHistory(h);
+        const cursor = h[h.length - 1];
         loadPostList(cursor?.author, cursor?.permlink);
       },
       () => {
-        pageHistory.push({ author: lastPost.author, permlink: lastPost.permlink });
+        // Older →: push last post as cursor for next page
+        const h = getPageHistory();
+        h.push({ author: lastPost.author, permlink: lastPost.permlink });
+        setPageHistory(h);
         loadPostList(lastPost.author, lastPost.permlink);
       }
     );
