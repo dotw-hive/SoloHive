@@ -429,19 +429,31 @@ function timeAgo(dateStr) {
 }
 
 function formatDate(dateStr) {
-  return new Date(dateStr + "Z").toLocaleDateString("en-US", {
-    year: "numeric", month: "long", day: "numeric",
+  const d = new Date(dateStr + "Z");
+  return d.toLocaleDateString("en-US", {
+    year:     "numeric",
+    month:    "long",
+    day:      "numeric",
+    timeZone: "UTC",   // prevent date shifting across timezones
   });
+}
+
+// Normalize a URL — handles protocol-relative and relative URLs
+function normalizeUrl(url) {
+  if (!url) return "";
+  if (url.startsWith("//")) return `https:${url}`;
+  if (url.startsWith("/") && BLOG_CONFIG.siteUrl) return `${BLOG_CONFIG.siteUrl}${url}`;
+  return url;
 }
 
 // Extract the first image URL from a post (checks json_metadata first, then body)
 function extractImage(post) {
   try {
     const meta = JSON.parse(post.json_metadata);
-    if (meta.image && meta.image[0]) return meta.image[0];
+    if (meta.image && meta.image[0]) return normalizeUrl(meta.image[0]);
   } catch (_) {}
   const m = post.body.match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
-  return m ? m[1] : null;
+  return m ? normalizeUrl(m[1]) : null;
 }
 
 // Extract tags from a post's json_metadata
