@@ -125,15 +125,46 @@ function setPostOpenGraph(post) {
 //  2. HIVE API
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Fallback nodes tried in order if the primary node fails.
+// The configured hiveNode is always tried first.
+const FALLBACK_NODES = [
+  "https://api.hive.blog",
+  "https://rpc.ecency.com",
+  "https://api.openhive.network",
+  "https://anyx.io",
+];
+
+// Returns an ordered list of nodes to try — configured node first,
+// then fallbacks (deduped so we don't try the same node twice).
+function getNodeList() {
+  const primary = (BLOG_CONFIG.hiveNode || "https://api.hive.blog").trim();
+  return [primary, ...FALLBACK_NODES.filter(n => n !== primary)];
+}
+
 async function hiveCall(method, params) {
-  const res  = await fetch(BLOG_CONFIG.hiveNode, {
-    method:  "POST",
-    headers: { "Content-Type": "application/json" },
-    body:    JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 }),
-  });
-  const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
-  return data.result;
+  const nodes   = getNodeList();
+  const body    = JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 });
+  let   lastErr = null;
+
+  for (const node of nodes) {
+    try {
+      const res  = await fetch(node, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      return data.result;
+    } catch (err) {
+      console.warn(`SoloHive: node ${node} failed — ${err.message}`);
+      lastErr = err;
+      // Short delay before trying next node
+      await new Promise(r => setTimeout(r, 300));
+    }
+  }
+
+  throw lastErr; // all nodes failed
 }
 
 // Fetch posts for the index page.
