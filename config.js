@@ -10,7 +10,7 @@ const BLOG_CONFIG = {
   // ----------------------------------------------------------
   //  YOUR HIVE IDENTITY
   // ----------------------------------------------------------
-  hiveUsername: "yourusername",          // Your Hive account name (no @)
+  hiveUsername: "dudeontheweb",          // Your Hive account name (no @)
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
