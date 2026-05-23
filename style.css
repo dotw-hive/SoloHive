@@ -748,3 +748,30 @@ h1, h2, h3, h4 {
   a                { text-decoration: none; color: black; }
   .post-body img   { max-width: 100%; height: auto !important; }
 }
+
+/* ── Image Captions ──────────────────────────────────────────── */
+.post-figure {
+  margin:  1.5rem auto;
+  display: block;
+  width:   fit-content;
+  max-width: 100%;
+}
+
+.post-figure img {
+  display:       block;
+  max-width:     100%;
+  height:        auto !important;
+  border-radius: var(--radius);
+  margin:        0;
+}
+
+.post-figure figcaption {
+  font-family: var(--font-ui);
+  font-size:   .82rem;
+  font-style:  italic;
+  color:       var(--color-muted);
+  text-align:  center;
+  margin-top:  .5rem;
+  padding:     0 .5rem;
+  line-height: 1.5;
+}

@@ -324,12 +324,33 @@ function renderMarkdown(md) {
   }
 
   if (typeof marked !== "undefined") {
-    const raw = marked.parse(md);
-    // Sanitize to prevent XSS from malicious Hive post content.
-    // Strips script tags, event handlers, and javascript: URLs
-    // while preserving safe HTML like headings, images, links, and formatting.
+    // Custom renderer — images with alt text show a caption below the image.
+    // Images with empty alt text render as plain <img> (decorative).
+    const renderer = new marked.Renderer();
+    renderer.image = function(href, title, text) {
+      // marked.js v5+ passes an object as first arg
+      if (typeof href === "object") {
+        text  = href.text  || "";
+        title = href.title || "";
+        href  = href.href  || "";
+      }
+      // Filter out filename alt text (e.g. "img_0001.png", "DSC_7615.JPG")
+      // PeakD and some other editors auto-insert the filename as alt text,
+      // which was not intended as a caption by the author.
+      const isFilename = /\.(jpg|jpeg|png|gif|webp|svg|bmp|tiff?|avif)$/i.test(text.trim());
+      const caption    = isFilename ? "" : text.trim();
+
+      const alt     = caption ? ` alt="${caption}"` : (text ? ` alt="${text}"` : "");
+      const titleAt = title   ? ` title="${title}"` : "";
+      const img     = `<img src="${href}"${alt}${titleAt}>`;
+      return caption
+        ? `<figure class="post-figure">${img}<figcaption>${caption}</figcaption></figure>`
+        : img;
+    };
+
+    const raw = marked.parse(md, { renderer });
     return DOMPurify.sanitize(raw, {
-      ADD_TAGS:    ["iframe"],
+      ADD_TAGS:    ["iframe", "figure", "figcaption"],
       ADD_ATTR:    ["allowfullscreen", "loading", "frameborder", "title"],
       FORBID_TAGS: ["script", "style"],
       FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover"],
