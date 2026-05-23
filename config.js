@@ -14,7 +14,15 @@ const BLOG_CONFIG = {
   hiveNode:     "https://api.hive.blog", // API node (leave this as-is)
 
   // ----------------------------------------------------------
-  //  HIVE FRONTEND
+  //  LANGUAGE
+  //  Set the language of your blog content. Used by screen readers
+  //  and search engines. Use a standard BCP 47 language tag.
+  //  Examples: "en" (English), "es" (Spanish), "fr" (French),
+  //            "de" (German), "pt" (Portuguese), "ja" (Japanese)
+  // ----------------------------------------------------------
+  htmlLang: "en",
+
+
   //  Which Hive frontend to use for profile links, "View on Hive",
   //  @mention links, and #tag links throughout the site.
   //  Common options:
