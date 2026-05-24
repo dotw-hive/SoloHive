@@ -5,8 +5,8 @@ travel bloggers, and anyone whose content is driven by imagery.
 
 ## Screenshots
 
-![Light mode](./screenshots/photography-light.png)
-![Dark mode](./screenshots/photography-dark.png)
+![Light mode](./screenshots/photgraphy-light.png)
+![Dark mode](./screenshots/photgraphy-dark.png)
 
 ## Preview
 
