@@ -2,6 +2,10 @@
 
 A dark, terminal-inspired theme for developers and tech bloggers.
 
+## Screenshots
+
+![Dark mode](./screenshots/tech-gaming.png)
+
 ## Preview
 
 - Deep dark background (#0d1117 — GitHub dark style)
