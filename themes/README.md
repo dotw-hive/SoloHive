@@ -8,7 +8,7 @@ no changes to `app.js` or `config.js` required.
 | Theme | Description | Default Mode | Preview |
 |-------|-------------|--------------|---------|
 | [tech-dark](./tech-dark/) | Terminal-inspired dark theme for developers and tech bloggers | Dark | ![](./tech-dark/screenshots/tech-gaming.png) |
-| [photography](./photography/) | Editorial theme for photographers and travel bloggers | Light | ![](./photography/screenshots/photgraphy-light.png) |
+| [photography](./photography/) | Editorial theme for photographers and travel bloggers | Light | ![](./photgraphy/screenshots/photgraphy-light.png) |
 | [personal](./personal/) | Warm personality-driven theme for personal blogs and portfolios | Light | ![](./personal/screenshots/personal-light.png) |
 
 ## How to Install a Theme
