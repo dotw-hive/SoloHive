@@ -3,6 +3,11 @@
 A clean, editorial theme built for visual storytellers — photographers,
 travel bloggers, and anyone whose content is driven by imagery.
 
+## Screenshots
+
+![Light mode](./screenshots/photography-light.png)
+![Dark mode](./screenshots/photography-dark.png)
+
 ## Preview
 
 - Warm off-white background (#faf8f5)
