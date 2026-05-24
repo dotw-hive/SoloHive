@@ -4,6 +4,11 @@ A warm, personality-driven theme for personal blogs and portfolio sites.
 Clean and modern with expressive typography, soft rounded corners,
 and a deep indigo accent. Designed to put the person front and center.
 
+## Screenshots
+
+![Light mode](./screenshots/personal-light.png)
+![Dark mode](./screenshots/personal-dark.png)
+
 ## Preview
 
 - Subtle lavender-tinted background (#f8f7ff)
