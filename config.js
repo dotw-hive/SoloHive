@@ -100,7 +100,7 @@ const BLOG_CONFIG = {
   //  Leave as "" to use the browser default (no favicon).
   //  Recommended size: 32x32 or 64x64 px. PNG or ICO format.
   // ----------------------------------------------------------
-  favicon: "favicon-32x32.png",  // e.g. "favicon.png"  or  "https://yourdomain.com/icon.png"
+  favicon: "favicon.ico",  // e.g. "favicon.png"  or  "https://yourdomain.com/icon.png"
 
   // ----------------------------------------------------------
   //  COMMENT FILTER
